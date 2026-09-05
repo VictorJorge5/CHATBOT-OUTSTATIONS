@@ -288,12 +288,12 @@
     .grid{grid-template-columns:1fr;grid-template-rows:auto auto 1fr;}
     .topics-toggle{
       display:flex;align-items:center;justify-content:space-between;
-      width:100%;background:var(--canvas);border:0;
-      border-bottom:1px solid var(--line);
-      padding:13px 16px;font-family:inherit;font-size:14px;font-weight:600;
-      color:var(--ink-2);cursor:pointer;
+      width:100%;background:var(--red-wash);border:0;
+      border-bottom:2px solid var(--red);
+      padding:14px 16px;font-family:inherit;font-size:15px;font-weight:700;
+      color:var(--red-dk);cursor:pointer;
     }
-    .topics-toggle .chev{transition:transform .15s;color:var(--muted);}
+    .topics-toggle .chev{transition:transform .15s;color:var(--red);font-weight:700;}
     .topics-toggle[aria-expanded="true"] .chev{transform:rotate(180deg);}
     .index{
       display:none;
@@ -463,6 +463,8 @@ function renderTopics(){
     nav.appendChild(b);
   });
   nav.scrollTop = 0;
+  nav.classList.add('open');
+  document.getElementById('topicsToggle').setAttribute('aria-expanded','true');
 }
 
 function closeTopicsToggle(){
