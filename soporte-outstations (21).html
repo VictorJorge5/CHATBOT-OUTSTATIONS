@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Outstations Support Desk — Iberia DTO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --shell:#0F1419;
+    --shell-2:#1A222B;
+    --shell-3:#28323D;
+    --ink:#111820;
+    --ink-2:#414C58;
+    --muted:#78838F;
+    --line:#E1E6EB;
+    --line-soft:#EDF1F4;
+    --paper:#FFFFFF;
+    --canvas:#F4F6F8;
+    --red:#C8102E;
+    --red-dk:#96001F;
+    --red-wash:#FCF0F2;
+    --gold:#E0A526;
+    --ok:#2F9E5E;
+    --r:3px;
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;margin:0;}
+  body{
+    font-family:'Barlow',system-ui,sans-serif;
+    font-size:15px;line-height:1.5;
+    color:var(--ink);background:var(--shell);
+    -webkit-font-smoothing:antialiased;
+  }
+  .mono{font-family:'IBM Plex Mono',monospace;}
+
+  /* ============ GATE ============ */
+  #gate{
+    position:fixed;inset:0;z-index:50;
+    background:var(--shell);color:#fff;
+    display:flex;flex-direction:column;
+    overflow-y:auto;
+  }
+  .gate-wrap{
+    width:100%;max-width:940px;margin:auto;
+    padding:48px 32px 56px;
+  }
+  .brandline{
+    display:flex;align-items:center;gap:12px;
+    font-size:12.5px;letter-spacing:0.02em;color:#8794A2;
+    margin-bottom:44px;
+  }
+  .brandline b{color:#fff;font-weight:600;letter-spacing:0.06em;}
+  .brandline .rule{flex:1;height:1px;background:var(--shell-3);}
+
+  .gate-wrap h1{
+    margin:0;font-size:46px;line-height:1.04;font-weight:600;
+    letter-spacing:-0.025em;max-width:15ch;
+  }
+  .gate-wrap h1 em{
+    font-style:normal;
+    display:block;
+    color:var(--gold);
+  }
+  .gate-lede{
+    margin:16px 0 40px;font-size:16.5px;color:#9AA6B3;max-width:52ch;
+  }
+
+  .ask{font-size:13px;color:#8794A2;margin:0 0 10px;}
+  .sta-field{display:flex;gap:10px;max-width:430px;}
+  .sta-field input{
+    flex:1;
+    font-family:'Barlow Condensed',sans-serif;
+    font-size:34px;font-weight:600;letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:#fff;background:var(--shell-2);
+    border:1px solid var(--shell-3);border-radius:var(--r);
+    padding:10px 18px;width:100%;
+  }
+  .sta-field input::placeholder{color:#4A5765;letter-spacing:0.16em;}
+  .sta-field input:focus{outline:none;border-color:var(--gold);}
+  .sta-field button{
+    font-family:inherit;font-size:15px;font-weight:600;color:#fff;
+    background:var(--red);border:0;border-radius:var(--r);
+    padding:0 26px;cursor:pointer;transition:background .12s;
+  }
+  .sta-field button:hover{background:var(--red-dk);}
+  .sta-field button:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+
+  .gate-err{
+    margin:10px 0 0;font-size:13.5px;color:#FF9AA8;min-height:19px;
+  }
+
+  .known{margin-top:46px;}
+  .known-head{
+    display:flex;align-items:baseline;gap:12px;
+    font-size:13px;color:#8794A2;margin-bottom:14px;
+  }
+  .known-head .rule{flex:1;height:1px;background:var(--shell-3);}
+  .known-head b{color:#C6D0DA;font-weight:600;}
+  .sta-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(48px,1fr));
+    gap:5px;
+  }
+  .sta-chip{
+    font-family:'Barlow Condensed',sans-serif;
+    font-size:14px;font-weight:600;letter-spacing:0.08em;
+    color:#B9C4CF;background:var(--shell-2);
+    border:1px solid var(--shell-3);border-radius:var(--r);
+    padding:6px 0;text-align:center;cursor:pointer;
+    transition:border-color .12s,color .12s;
+  }
+  .sta-chip:hover{border-color:var(--gold);color:#fff;}
+  .sta-chip:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+  .gate-skip{
+    margin-top:26px;font-size:13.5px;color:#8794A2;
+  }
+  .gate-skip button{
+    background:none;border:0;padding:0;font-family:inherit;font-size:13.5px;
+    color:#C6D0DA;text-decoration:underline;text-underline-offset:3px;cursor:pointer;
+  }
+  .gate-skip button:hover{color:#fff;}
+
+  /* ============ DESK ============ */
+  #desk{display:none;height:100vh;height:100dvh;flex-direction:column;}
+  #desk.on{display:flex;}
+
+  .topbar{
+    background:var(--shell);color:#fff;
+    display:flex;align-items:center;gap:20px;
+    padding:0 20px;height:56px;flex-shrink:0;
+    border-bottom:1px solid var(--shell-3);
+  }
+  .topbar .mark{
+    font-size:12.5px;letter-spacing:0.06em;font-weight:600;
+  }
+  .topbar .sep{width:1px;height:22px;background:var(--shell-3);}
+  .topbar .desk-name{font-size:14px;color:#B9C4CF;}
+  .topbar .spacer{flex:1;}
+  .sta-badge{
+    display:flex;align-items:center;gap:10px;
+    background:var(--shell-2);border:1px solid var(--shell-3);
+    border-radius:var(--r);padding:5px 12px;
+  }
+  .sta-badge .code{
+    font-family:'Barlow Condensed',sans-serif;
+    font-size:20px;font-weight:600;letter-spacing:0.1em;color:#fff;
+  }
+  .sta-badge .kind{font-size:11.5px;color:#8794A2;line-height:1.2;}
+  .switch{
+    background:none;border:0;font-family:inherit;font-size:12.5px;
+    color:#8794A2;text-decoration:underline;text-underline-offset:3px;cursor:pointer;
+  }
+  .switch:hover{color:#fff;}
+
+  .grid{
+    flex:1;display:grid;
+    grid-template-columns:250px 1fr 288px;
+    min-height:0;background:var(--paper);
+  }
+
+  /* ---- index ---- */
+  .index{background:var(--canvas);border-right:1px solid var(--line);overflow-y:auto;padding:18px 0;}
+  .sect{
+    font-size:11.5px;font-weight:600;color:var(--ink-2);
+    padding:0 18px 10px;
+  }
+  .topic{
+    display:grid;grid-template-columns:58px 1fr;gap:8px;align-items:start;
+    width:100%;text-align:left;background:none;border:0;
+    border-top:1px solid var(--line-soft);
+    padding:10px 18px;font-family:inherit;font-size:13.5px;line-height:1.35;
+    color:var(--ink);cursor:pointer;transition:background .12s;
+  }
+  .topic:last-of-type{border-bottom:1px solid var(--line-soft);}
+  .topic:hover{background:#E9EDF1;}
+  .topic:focus-visible{outline:2px solid var(--red);outline-offset:-2px;}
+  .topic .c{
+    font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;
+    letter-spacing:0.04em;color:var(--red);padding-top:2px;
+  }
+
+  /* ---- thread ---- */
+  .thread-col{display:flex;flex-direction:column;min-height:0;}
+  .thread{flex:1;overflow-y:auto;padding:24px 28px 6px;display:flex;flex-direction:column;gap:16px;}
+  .msg{max-width:64ch;font-size:14.5px;line-height:1.6;}
+  .msg.bot{align-self:flex-start;}
+  .msg.user{
+    align-self:flex-end;background:var(--ink);color:#fff;
+    padding:8px 13px;border-radius:var(--r);max-width:50ch;
+  }
+  .msg.bot .body{
+    background:var(--paper);border:1px solid var(--line);
+    border-left:3px solid var(--red);border-radius:var(--r);padding:13px 15px;
+  }
+  .msg.bot .step-label{
+    display:block;font-family:'IBM Plex Mono',monospace;
+    font-size:10px;font-weight:600;letter-spacing:0.05em;
+    color:var(--gold);margin-bottom:6px;
+  }
+  .msg.bot a{color:var(--red);text-decoration:underline;text-underline-offset:2px;}
+  .msg.bot a:hover{color:var(--red-dk);}
+  .msg ol,.msg ul{margin:8px 0 0;padding-left:19px;}
+  .msg li{margin-bottom:5px;}
+  .msg .note{
+    margin-top:9px;padding-top:9px;border-top:1px solid var(--line-soft);
+    font-size:12.5px;color:var(--muted);
+  }
+  .choices{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px;}
+  .choices button{
+    background:var(--paper);border:1px solid var(--red);color:var(--red-dk);
+    padding:6px 12px;border-radius:var(--r);font-family:inherit;
+    font-size:13px;font-weight:500;cursor:pointer;transition:background .12s;
+  }
+  .choices button:hover{background:var(--red-wash);}
+  .choices button:focus-visible{outline:2px solid var(--red);outline-offset:2px;}
+
+  .thinking{display:none;align-items:center;gap:5px;padding:0 28px 8px;color:var(--muted);font-size:13px;}
+  .thinking i{width:5px;height:5px;border-radius:50%;background:var(--muted);animation:p 1.1s ease-in-out infinite;}
+  .thinking i:nth-child(2){animation-delay:.15s;}
+  .thinking i:nth-child(3){animation-delay:.3s;}
+  @keyframes p{0%,100%{opacity:.25;}50%{opacity:1;}}
+
+  .composer{border-top:1px solid var(--line);padding:13px 28px 15px;flex-shrink:0;}
+  .field{display:flex;gap:9px;}
+  .field input{
+    flex:1;font-family:inherit;font-size:15px;color:var(--ink);
+    background:var(--canvas);border:1px solid var(--line);
+    border-radius:var(--r);padding:11px 13px;
+  }
+  .field input:focus{outline:none;border-color:var(--red);background:var(--paper);}
+  .field button{
+    font-family:inherit;font-size:14px;font-weight:600;color:#fff;
+    background:var(--red);border:0;border-radius:var(--r);
+    padding:11px 21px;cursor:pointer;transition:background .12s;
+  }
+  .field button:hover:not(:disabled){background:var(--red-dk);}
+  .field button:disabled{opacity:.45;cursor:default;}
+
+  /* ---- context ---- */
+  .ctx{background:var(--canvas);border-left:1px solid var(--line);overflow-y:auto;padding:18px;}
+  .card{
+    background:var(--paper);border:1px solid var(--line);
+    border-radius:var(--r);padding:14px;margin-bottom:14px;
+  }
+  .card .sta-big{
+    font-family:'Barlow Condensed',sans-serif;
+    font-size:42px;font-weight:600;letter-spacing:0.08em;
+    line-height:1;color:var(--ink);
+  }
+  .kindtag{
+    display:inline-block;margin-top:8px;font-size:11.5px;font-weight:600;
+    padding:3px 8px;border-radius:var(--r);
+  }
+  .kindtag.generic{background:#FFF4DC;color:#8A6100;}
+  .kindtag.domain{background:#E8F3EC;color:#1D6B3F;}
+  .row{margin-top:13px;padding-top:13px;border-top:1px solid var(--line-soft);}
+  .row .k{font-size:11.5px;color:var(--muted);margin-bottom:3px;}
+  .row .v{font-size:13.5px;font-weight:500;word-break:break-all;}
+  .copy{
+    margin-top:6px;background:none;border:1px solid var(--line);
+    border-radius:var(--r);padding:4px 9px;font-family:inherit;
+    font-size:11.5px;color:var(--ink-2);cursor:pointer;
+  }
+  .copy:hover{border-color:var(--red);color:var(--red);}
+  .ctx h3{
+    font-size:11.5px;font-weight:600;color:var(--ink-2);
+    margin:0 0 9px;
+  }
+  .ref{font-size:13px;line-height:1.55;}
+  .ref div{margin-bottom:9px;}
+  .ref .k{font-size:11.5px;color:var(--muted);}
+  .ref a{color:var(--red);text-decoration:none;}
+  .ref a:hover{text-decoration:underline;}
+
+  .escalate{
+    width:100%;background:var(--ink);color:#fff;border:0;
+    border-radius:var(--r);padding:10px;font-family:inherit;
+    font-size:13px;font-weight:600;cursor:pointer;
+  }
+  .escalate:hover{background:#000;}
+
+  /* ---- responsive ---- */
+  @media (max-width:1060px){
+    .grid{grid-template-columns:220px 1fr;}
+    .ctx{display:none;}
+  }
+  @media (max-width:780px){
+    .gate-wrap{padding:32px 18px 44px;}
+    .gate-wrap h1{font-size:34px;}
+    .brandline{margin-bottom:30px;}
+    .grid{grid-template-columns:1fr;grid-template-rows:auto 1fr;}
+    .index{
+      border-right:0;border-bottom:1px solid var(--line);
+      display:flex;gap:7px;overflow-x:auto;padding:11px 0;white-space:nowrap;
+    }
+    .sect{display:none;}
+    .topic{
+      display:block;width:auto;flex-shrink:0;
+      border:1px solid var(--line);border-radius:var(--r);
+      background:var(--paper);padding:8px 11px;
+    }
+    .topic:first-of-type{margin-left:14px;}
+    .topic:last-of-type{margin-right:14px;border-bottom:1px solid var(--line);}
+    .topic .c{padding-top:0;margin-bottom:2px;}
+    .thread{padding:18px 14px 6px;}
+    .composer{padding:11px 14px 13px;}
+    .thinking{padding-left:14px;}
+    .topbar{gap:12px;padding:0 14px;}
+    .topbar .desk-name,.topbar .sep{display:none;}
+    .msg.user{max-width:82%;}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+</style>
+</head>
+<body>
+
+<!-- ========== ENTRY ========== -->
+<div id="gate">
+  <div class="gate-wrap">
+    <div class="brandline"><b>IBERIA</b><span>Dirección Técnica del Operador</span><span class="rule"></span><span>Outstations</span></div>
+
+    <h1>Support desk for<em>line stations</em></h1>
+    <p class="gate-lede">Access and application problems, answered with the setup your station actually uses. Start by telling us where you are.</p>
+
+    <p class="ask">Station code</p>
+    <div class="sta-field">
+      <input type="text" id="staInput" maxlength="3" placeholder="AAA" autocomplete="off" spellcheck="false" aria-label="Station code">
+      <button id="staGo">Continue</button>
+    </div>
+    <p class="gate-err" id="staErr"></p>
+
+    <div class="known">
+      <div class="known-head"><b>All stations</b><span>tap yours to continue</span><span class="rule"></span></div>
+      <div class="sta-grid" id="staGrid"></div>
+    </div>
+
+    <p class="gate-skip">Station not listed? <button id="staSkip">Continue without a station</button></p>
+  </div>
+</div>
+
+<!-- ========== DESK ========== -->
+<div id="desk">
+  <div class="topbar">
+    <span class="mark">IBERIA</span>
+    <span class="sep"></span>
+    <span class="desk-name">Outstations Support Desk</span>
+    <span class="spacer"></span>
+    <div class="sta-badge" id="staBadge"></div>
+    <button class="switch" id="switchSta">Change</button>
+  </div>
+
+  <div class="grid">
+    <nav class="index" aria-label="Common issues" id="topicNav">
+      <div class="sect">Common issues</div>
+    </nav>
+
+    <div class="thread-col">
+      <div class="thread" id="thread" role="log" aria-live="polite"></div>
+      <div class="thinking" id="thinking"><i></i><i></i><i></i></div>
+      <div class="composer">
+        <div class="field">
+          <input type="text" id="freeInput" placeholder="Describe your problem…" aria-label="Describe your problem">
+          <button id="sendBtn">Send</button>
+        </div>
+      </div>
+    </div>
+
+    <aside class="ctx">
+      <div class="card" id="staCard"></div>
+      <h3>Quick reference</h3>
+      <div class="ref">
+        <div><div class="k">Organisation code</div>IBCM</div>
+        <div><div class="k">IT Helpdesk</div>+34 915 874 700<br><a href="mailto:ssi@iberia.es">ssi@iberia.es</a></div>
+        <div><div class="k">DTO Outstations</div><a href="mailto:OutstationsIBOperator@iberia.es">OutstationsIBOperator@iberia.es</a></div>
+        <div><div class="k">MAINTROL (OTP)</div>+34 91 318 93 00<br><a href="mailto:MAINTROL@iberia.es">MAINTROL@iberia.es</a></div>
+      </div>
+      <button class="escalate" id="escalateBtn">Contact the support team</button>
+    </aside>
+  </div>
+</div>
+
+<script>
+const WORKER_URL = 'https://outstations-support.victorjjm5.workers.dev';
+
+/* 47 stations confirmed with AMOS access and personal Iberia Domain accounts */
+const AMOS_DOMAIN = ['AMS','ARN','ATH','BER','BOG','BOS','BRU','BUD','CDG','DFW','DOH','DSS','DUS','EWR',
+  'FCO','FOR','GVA','HAM','HAV','HEL','IAD','JFK','LAX','LHR','LIM','LIN','LIS','MCO','MIA','MTY','MUC',
+  'MXP','NAP','NRT','OPO','ORD','ORY','PRG','PTY','REC','SDQ','SFO','SJU','VCE','VIE','YYZ','ZRH'];
+
+/* Stations whose Docunet login is a shared generic account rather than a personal Iberia Domain user.
+   MUC is a special case: it has AMOS + personal Domain accounts, but Docunet specifically uses this
+   generic account instead. */
+const DOCUNET_GENERIC = {
+  BRI:'briml@atitech.it', CAG:'cagml@atitech.it', CFU:'cfulm@aerocandia.com',
+  CPH:'cph@northern-aerotech.com', CTA:'CTAML@atitech.it', DBV:'dbv.mai@croatiaairlines.hr',
+  EDI:'baeng.edi@ba.com', FAO:'las.faro@las.pt', FLR:'FLRML@atitech.it',
+  FNC:'las.funchal@las.pt', FRA:'fra@nayak.aero', JMK:'jmklm@aerocandia.com',
+  JTR:'jtrlm@aerocandia.com', LJU:'line.maintenance@aateh.si', MUC:'muc@nayak.aero',
+  OLB:'olb@f-lm.aero', OSL:'line@sam.aero', OTP:'otp@athensaero.com',
+  PDL:'las.pontadelgada@las.pt', PMO:'PMOML@ATITECH.IT', RAK:'rak.operations@qsamorocco.com',
+  RVN:'rvn@northern-aerotech.com', SPU:'spu.mai@croatiaairlines.hr', TIA:'tia@athensaero.com',
+  TIV:'base-tv@jat-tech.rs', TOS:'tos.engineers@fltechnics.com', TRS:'trsml@atitech.it',
+  ZAG:'ctn.ibe@croatiaairlines.hr'
+};
+
+function stationProfile(code){
+  if(!code) return { code:null, domain:true, amos:true, docunetGeneric:null, known:false };
+  const domain = AMOS_DOMAIN.includes(code);
+  const generic = DOCUNET_GENERIC[code] || null;
+  const known = domain || !!generic;
+  return {
+    code,
+    domain: known ? domain : true,      // unlisted codes default to the standard (Domain) setup
+    amos: known ? domain : true,
+    docunetGeneric: generic,
+    known
+  };
+}
+
+let station = null;
+
+/* ---------- entry ---------- */
+const gate = document.getElementById('gate');
+const desk = document.getElementById('desk');
+const staInput = document.getElementById('staInput');
+const staErr = document.getElementById('staErr');
+
+const grid = document.getElementById('staGrid');
+const ALL_STATIONS = Array.from(new Set([...AMOS_DOMAIN, ...Object.keys(DOCUNET_GENERIC)])).sort();
+ALL_STATIONS.forEach(code=>{
+  const b = document.createElement('button');
+  b.className = 'sta-chip';
+  b.textContent = code;
+  b.onclick = ()=>enterDesk(code);
+  grid.appendChild(b);
+});
+
+/* ---------- sidebar, built per station ---------- */
+const TOPICS = [
+  { flow:'authenticator', code:'AUTH-01', label:'Changed phone, Authenticator not working', show: s=>s.domain },
+  { flow:'docunet',       code:'DOC-02',  label:'Cannot access Docunet / ContentManager365', show: ()=>true },
+  { flow:'etlb',          code:'TLB-03',  label:'Problem accessing e-TLB',                    show: ()=>true },
+  { flow:'amos',          code:'AMS-05',  label:'No access to AMOS',                          show: s=>s.amos },
+  { flow:'onboarding',    code:'ONB-06',  label:'New account activation',                     show: s=>s.domain },
+  { flow:'otp',           code:'OTP-07',  label:'No Domain credentials for e-TLB',            show: s=>s.domain },
+  { flow:'viewer',        code:'APP-08',  label:'Read manuals offline',                       show: ()=>true },
+  { flow:'usermgmt',      code:'USR-09',  label:'Create or remove a user',                    show: s=>s.domain }
+];
+const FLOW_FN = {
+  authenticator:flowAuthenticator, docunet:flowDocunet, etlb:flowEtlb, cuenta:flowCuenta,
+  amos:flowAmos, onboarding:flowOnboarding, otp:flowOtp, viewer:flowViewer, usermgmt:flowUserMgmt
+};
+
+function renderTopics(){
+  const nav = document.getElementById('topicNav');
+  nav.querySelectorAll('.topic').forEach(el=>el.remove());
+  TOPICS.filter(t=>t.show(station)).forEach(t=>{
+    const b = document.createElement('button');
+    b.className = 'topic';
+    b.innerHTML = '<span class="c">'+t.code+'</span><span>'+t.label+'</span>';
+    b.onclick = ()=>FLOW_FN[t.flow]();
+    nav.appendChild(b);
+  });
+}
+
+function enterDesk(code){
+  code = (code||'').toUpperCase().trim();
+  station = stationProfile(code || null);
+
+  const kindLabel = !station.code ? 'No station selected'
+    : station.docunetGeneric ? 'Shared Docunet account' : 'Iberia Domain';
+  document.getElementById('staBadge').innerHTML = station.code
+    ? '<span class="code">'+station.code+'</span><span class="kind">'+kindLabel+'</span>'
+    : '<span class="kind">No station selected</span>';
+
+  let cardHtml;
+  if(!station.code){
+    cardHtml = '<div class="sta-big">—</div><span class="kindtag domain">No station selected</span>'
+      + '<div class="row"><div class="k">Note</div><div class="v" style="font-weight:400">Answers will cover both account types.</div></div>';
+  } else {
+    cardHtml = '<div class="sta-big">'+station.code+'</div>';
+    if(station.docunetGeneric){
+      cardHtml += '<span class="kindtag generic">Shared Docunet account</span>'
+        + '<div class="row"><div class="k">Docunet sign-in</div><div class="v">'+station.docunetGeneric+'</div>'
+        + '<button class="copy" id="copyBtn">Copy username</button></div>'
+        + '<div class="row"><div class="k">Docunet password resets</div><div class="v" style="font-weight:400">Handled by Vistair, not Microsoft.</div></div>';
+    } else {
+      cardHtml += '<span class="kindtag domain">Personal Iberia Domain</span>'
+        + '<div class="row"><div class="k">Sign in as</div><div class="v" style="font-weight:400">Your personal Iberia Domain user (name@iberia.es)</div></div>';
+    }
+    if(station.domain){
+      cardHtml += '<div class="row"><div class="k">'+(station.docunetGeneric?'Other systems':'Password resets')+'</div><div class="v" style="font-weight:400">'
+        + (station.docunetGeneric ? 'AMOS and Authenticator use your personal Domain account.' : 'Microsoft, with Authenticator.') + '</div></div>';
+    }
+  }
+  document.getElementById('staCard').innerHTML = cardHtml;
+
+  const cb = document.getElementById('copyBtn');
+  if(cb) cb.onclick = ()=>{
+    navigator.clipboard.writeText(station.docunetGeneric).then(()=>{
+      cb.textContent = 'Copied';
+      setTimeout(()=>cb.textContent='Copy username',1600);
+    }).catch(()=>{ cb.textContent = 'Copy failed'; });
+  };
+
+  renderTopics();
+  gate.style.display = 'none';
+  desk.classList.add('on');
+  seedConversation();
+  greet();
+  freeInput.focus();
+}
+
+document.getElementById('staGo').onclick = ()=>{
+  const v = staInput.value.toUpperCase().trim();
+  if(v.length !== 3){ staErr.textContent = 'Station codes are three letters, for example CFU.'; return; }
+  staErr.textContent = '';
+  enterDesk(v);
+};
+staInput.addEventListener('keydown', e=>{ if(e.key==='Enter') document.getElementById('staGo').click(); });
+staInput.addEventListener('input', ()=>{ staErr.textContent=''; });
+document.getElementById('staSkip').onclick = ()=>enterDesk(null);
+document.getElementById('switchSta').onclick = ()=>{
+  desk.classList.remove('on');
+  gate.style.display = 'flex';
+  threadEl.innerHTML = '';
+  staInput.value = '';
+  staInput.focus();
+};
+
+/* ---------- transcript ---------- */
+const threadEl = document.getElementById('thread');
+const thinkingEl = document.getElementById('thinking');
+const freeInput = document.getElementById('freeInput');
+const sendBtn = document.getElementById('sendBtn');
+
+function addMsg(role, html){
+  const d = document.createElement('div');
+  d.className = 'msg ' + role;
+  if(role === 'bot'){
+    const b = document.createElement('div');
+    b.className = 'body'; b.innerHTML = html; d.appendChild(b);
+  } else { d.innerHTML = html; }
+  threadEl.appendChild(d);
+  threadEl.scrollTop = threadEl.scrollHeight;
+  return role === 'bot' ? d.firstChild : d;
+}
+
+function addChoices(container, options){
+  const w = document.createElement('div');
+  w.className = 'choices';
+  options.forEach(o=>{
+    const b = document.createElement('button');
+    b.textContent = o.label;
+    b.onclick = ()=>{ addMsg('user', o.label); w.remove(); o.onClick(); };
+    w.appendChild(b);
+  });
+  container.appendChild(w);
+  threadEl.scrollTop = threadEl.scrollHeight;
+}
+
+const resolved = ()=>addMsg('bot','Good. Anything else you need?');
+
+function greet(){
+  if(!station.code){
+    addMsg('bot','Pick an issue on the left, or describe the problem below.<div class="note">This desk covers access to Iberia systems only. For maintenance procedures, airworthiness or aircraft documentation, refer to the LSHM or contact MAINTROL.</div>');
+  } else if(station.docunetGeneric){
+    addMsg('bot','Docunet at your station signs in with <b>'+station.docunetGeneric+'</b>, organisation code <b>IBCM</b>. Pick an issue on the left, or describe the problem below.');
+  } else {
+    addMsg('bot','Station <b>'+station.code+'</b> uses personal Iberia Domain accounts. Pick an issue on the left, or describe the problem below.');
+  }
+}
+
+/* ---------- flows ---------- */
+function flowAuthenticator(){
+  addMsg('user','Changed phone, Authenticator not working');
+  authTree();
+}
+
+function authTree(){
+  const s = addMsg('bot','<span class="step-label">AUTH-01</span>Do you still have your previous phone, with Microsoft Authenticator working on it?');
+  addChoices(s,[
+    {label:'Yes, I still have it', onClick:()=>{
+      const r = addMsg('bot','<span class="step-label">AUTH-01 · SELF-SERVICE</span>You can move it across yourself:<ol><li>On a computer, go to <a href="https://myaccount.microsoft.com/" target="_blank" rel="noopener">myaccount.microsoft.com</a> and sign in with your Iberia Domain user.</li><li>Open <b>Security info</b>.</li><li>Select <b>Add sign-in method</b>.</li><li>Install Microsoft Authenticator on the new phone, tap <b>+</b>, choose <b>Work or school account</b>, scan the QR code on screen.</li><li>Once the new phone works, delete the line for the old device.</li></ol>');
+      addChoices(r,[{label:'That worked',onClick:resolved},{label:'Still not working',onClick:escalate}]);
+    }},
+    {label:'No, but I know my password', onClick:()=>{
+      const r = addMsg('bot','<span class="step-label">AUTH-01 · UNPAIR REQUEST</span>IT has to unpair the old device first.<ol><li>Open <a href="https://ibcolumbus.service-now.com/esc?id=sc_cat_item&table=sc_cat_item&sys_id=31d43c163b6972901baf6424c3e45aa9&recordUrl=com.glideapp.servicecatalog_cat_item_view.do%3Fv%3D1&sysparm_id=31d43c163b6972901baf6424c3e45aa9" target="_blank" rel="noopener">Unpair Microsoft Authenticator Device</a> and submit the request.</li><li>Once it is unpaired, sign in with your usual password.</li><li>You will then be prompted to register the new phone.</li></ol>');
+      addChoices(r,[{label:'That worked',onClick:resolved},{label:'Still not working',onClick:escalate}]);
+    }},
+    {label:'No, and I forgot my password', onClick:()=>helpdeskRoute(true)}
+  ]);
+}
+
+function flowCuenta(){
+  addMsg('user','Locked account or forgotten password');
+  if(station.docunetGeneric && station.domain){
+    // Mixed case (e.g. MUC): a shared Docunet account AND a personal Domain account both exist.
+    const s = addMsg('bot','<span class="step-label">USR-04</span>Your station has two separate logins. Which one is this about?');
+    addChoices(s,[
+      {label:'Docunet ('+station.docunetGeneric+')', onClick: ()=>vistairReset()},
+      {label:'My personal Domain account (AMOS / e-TLB)', onClick: ()=>domainPasswordTree()}
+    ]);
+    return;
+  }
+  if(station.docunetGeneric){ vistairReset(); return; }
+  domainPasswordTree();
+}
+
+function vistairReset(){
+  const s = addMsg('bot','<span class="step-label">USR-04 · DOCUNET</span>This account is a Vistair login, not a Microsoft one, so it resets on the Vistair page itself:<ol><li>Go to <a href="https://login.vistair.com/login" target="_blank" rel="noopener">login.vistair.com/login</a>.</li><li>Enter Organisation Code <b>IBCM</b> and Username <b>'+station.docunetGeneric+'</b>.</li><li>The password field appears, with an <b>I forgot my password</b> link underneath.</li><li>Click it to request a new password. It arrives by email.</li></ol><div class="note">Do not use passwordreset.microsoftonline.com or call the IT Helpdesk for this account — those only apply to personal Iberia Domain users.</div>');
+  addChoices(s,[{label:'That worked',onClick:resolved},{label:'Still not working',onClick:escalate}]);
+}
+
+function domainPasswordTree(){
+  const s = addMsg('bot','<span class="step-label">USR-04</span>Is Microsoft Authenticator linked to your account, on a phone you have with you?');
+  addChoices(s,[
+    {label:'Yes, it is linked', onClick:()=>{
+      const r = addMsg('bot','<span class="step-label">USR-04 · SELF-SERVICE</span>Reset it yourself at <a href="https://passwordreset.microsoftonline.com/" target="_blank" rel="noopener">passwordreset.microsoftonline.com</a>, approving the notification on your phone.');
+      addChoices(r,[{label:'That worked',onClick:resolved},{label:'Still not working',onClick:escalate}]);
+    }},
+    {label:'No, it is not linked', onClick:()=>helpdeskRoute(false)}
+  ]);
+}
+
+function helpdeskRoute(alsoUnpair){
+  const intro = alsoUnpair
+    ? 'Without the phone linked to your MFA, and without your Iberia Domain password, this goes through the helpdesk:'
+    : 'Without Authenticator linked, you need a temporary password from the helpdesk:';
+  const first = alsoUnpair
+    ? '<li>Call <b>+34 915 874 700</b>, Iberia option. Identify yourself with your Iberia Domain user and ask for <b>both</b>: unpairing your old Authenticator device, <b>and</b> a temporary password. Do not mention AMOS or ContentManager365.</li>'
+    : '<li>Call <b>+34 915 874 700</b>, Iberia option. Identify yourself with your Iberia Domain user and ask for a temporary password. Do not mention AMOS or ContentManager365.</li>';
+  const s = addMsg('bot','<span class="step-label">HELPDESK ROUTE</span>'+intro+'<ol>'+first+'<li>The temporary password only lets you set a new one. It opens no application.</li><li>Sign in at <a href="https://account.microsoft.com/account/" target="_blank" rel="noopener">account.microsoft.com/account</a> with your Domain user and that password. You will be asked to set a new password and link Authenticator: install the app, tap <b>+</b>, choose <b>Work or school account</b>, scan the QR code.</li><li>Open a private window and sign in again with the new password.</li><li>In <b>Security info</b>, delete the temporary password line.</li><li>From then on you reset your own password at <a href="https://passwordreset.microsoftonline.com/" target="_blank" rel="noopener">passwordreset.microsoftonline.com</a>.</li></ol>');
+  addChoices(s,[{label:'That worked',onClick:resolved},{label:'Still not working',onClick:escalate}]);
+}
+
+function flowDocunet(){
+  addMsg('user','Cannot access Docunet / ContentManager365');
+  const who = station.docunetGeneric
+    ? 'the shared account <b>'+station.docunetGeneric+'</b>'
+    : 'your Iberia Domain user';
+  const resetLine = station.docunetGeneric
+    ? '<li>Forgotten password? Entering the Organisation Code and Username reveals the password field, with an <b>I forgot my password</b> link underneath — click it for a new password by email.</li>'
+    : '<li>Forgotten password? Reset it yourself at <a href="https://passwordreset.microsoftonline.com/" target="_blank" rel="noopener">passwordreset.microsoftonline.com</a> if Authenticator is linked to your account; otherwise call <b>+34 915 874 700</b> (Iberia option) for a temporary password.</li>';
+  const s = addMsg('bot','<span class="step-label">DOC-02</span>This also covers <i>ID not recognized</i>, <i>authenticated by your identity provider but could not be found</i>, and <i>no permission — contact your administrator</i>. In all three, the browser has usually signed you in with the wrong Microsoft account.<ol><li>Open a private or incognito window, so the browser does not reuse an account you already have open.</li><li>Go to <a href="https://login.vistair.com/login" target="_blank" rel="noopener">login.vistair.com/login</a>.</li><li>Organisation Code <b>IBCM</b>. The old IBE code no longer works.</li><li>Sign in with '+who+' — not your own company email.</li>'+resetLine+'<li>Locked out after failed attempts? It clears by itself after 15 minutes.</li></ol>');
+  addChoices(s,[
+    {label:'That worked',onClick:resolved},
+    {label:'Still not working',onClick:escalate}
+  ]);
+}
+
+function flowEtlb(){
+  addMsg('user','Problem accessing e-TLB');
+  if(!station.domain){
+    const s = addMsg('bot','<span class="step-label">TLB-03</span>Your station has no Iberia Domain account, so e-TLB (Aviatar) is never a direct sign-in here — you always request a one-time password from MAINTROL to certify:<ul><li>Phone +34 91 318 93 00 / 01 / 02, or +34 680 99 46 06</li><li>Email <a href="mailto:MAINTROL@iberia.es">MAINTROL@iberia.es</a></li></ul>Give the aircraft tail number, and the certifier name and email (must be your personal company email, not the generic one for the station).');
+    addChoices(s,[{label:'Got it',onClick:resolved}]);
+    return;
+  }
+  const s = addMsg('bot','<span class="step-label">TLB-03</span>e-TLB (Aviatar) uses the same Iberia Domain login as ContentManager365 or AirnavX — select <b>Sign in for Iberia</b>. Which is it?');
+  addChoices(s,[
+    {label:'A sign-in problem',onClick:flowCuenta},
+    {label:'My profile expired',onClick:()=>{
+      const r = addMsg('bot','Profile expiry is a regulatory renewal, not a password reset. The outstations team processes it.');
+      addChoices(r,[{label:'Request renewal',onClick:escalate}]);
+    }},
+    {label:'I have no Domain user for e-TLB',onClick:flowOtp}
+  ]);
+}
+
+function flowAmos(){
+  addMsg('user','No access to AMOS');
+  const s = addMsg('bot','<span class="step-label">AMS-05</span>For external Part-145 organisations, AMOS accounts are deactivated automatically after 3 months without use. That is almost always the cause.<ol><li>Submit a <a href="https://ibcolumbus.service-now.com/esc?id=sc_cat_item&sys_id=4ceb35932b62a6107924f142de91bfb4" target="_blank" rel="noopener">request for AMOS reactivation</a>.</li><li>If it still fails after reactivation, or the access was never set up, write to <a href="mailto:OutstationsIBOperator@iberia.es">OutstationsIBOperator@iberia.es</a>.</li></ol>');
+  addChoices(s,[{label:'That worked',onClick:resolved},{label:'Still not working',onClick:escalate}]);
+}
+
+function flowOnboarding(){
+  addMsg('user','New account activation');
+  const s = addMsg('bot','<span class="step-label">ONB-06</span>Setting up a personal Iberia Domain account for the first time:<ol><li>You should receive two automated emails from <b>seginf@iberia.es</b> with your Domain user and a temporary password. Check the spam folder.</li><li>Sign in at <a href="https://account.microsoft.com/account/" target="_blank" rel="noopener">account.microsoft.com/account</a>. You will be asked to set a new password and link Authenticator: install the app, tap <b>+</b>, choose <b>Work or school account</b>, scan the QR code.</li><li>Open a private window and sign in again with the new password.</li><li>In <b>Security info</b>, delete the temporary password line.</li><li>Open ContentManager365 with Organisation Code <b>IBCM</b> and complete the mandatory Read &amp; Sign. Manuals, InfoNotes and the other applications are reached from there.</li></ol>If the temporary password expires first, call <b>+34 915 874 700</b> (Iberia option) for a new one.');
+  addChoices(s,[{label:'Account is working',onClick:resolved},{label:'Still not working',onClick:escalate}]);
+}
+
+function flowOtp(){
+  addMsg('user','No Domain credentials for e-TLB');
+  const s = addMsg('bot','<span class="step-label">OTP-07</span>If a certifier has no Iberia Domain user, or the aircraft tablet has no connectivity, request a one-time password from MAINTROL:<ul><li>Phone +34 91 318 93 00 / 01 / 02, or +34 680 99 46 06</li><li>Email <a href="mailto:MAINTROL@iberia.es">MAINTROL@iberia.es</a></li></ul>Give the aircraft tail number, and the certifier name and email (must be your personal company email, not the generic one for the station).');
+  addChoices(s,[{label:'Got it',onClick:resolved}]);
+}
+
+function flowViewer(){
+  addMsg('user','Read manuals offline');
+  const s = addMsg('bot','<span class="step-label">APP-08</span>To read ContentManager365 manuals without a connection:<ol><li>Install <b>DocuNet Viewer</b> from the App Store or Google Play.</li><li>While on Wi-Fi or mobile data, download the manuals you need. They stay available offline.</li></ol>For online reading, use the DocuNet Viewer link provided by Iberia — nothing to install.'+(station.docunetGeneric?'<div class="note">Docunet at your station shares one account, so a lockout affects everyone at '+station.code+'.</div>':''));
+  addChoices(s,[{label:'Got it',onClick:resolved},{label:'Still not working',onClick:escalate}]);
+}
+
+function flowUserMgmt(){
+  addMsg('user','Create or remove a user');
+  const s = addMsg('bot','<span class="step-label">USR-09</span>New users and removals go through the Users Management form in ContentManager365/Docunet (must be requested by someone with Iberia Domain and access to Docunet):<ol><li>Open a private or incognito window, so the browser does not reuse an account you already have open.</li><li>Go to <a href="https://docunet-online.vistair.com/" target="_blank" rel="noopener">ContentManager365 (Docunet)</a>.</li><li>Navigate the folders: <b>IBERIA</b> &gt; <b>CAMO MANUALS &amp; PROCEDURES</b> &gt; <b>Special Procedures and Forms for external MRO\'s</b> &gt; <b>Forms</b> &gt; <b>Users Management</b>.</li><li>Fill in and submit the form with the required details.</li></ol>');
+  addChoices(s,[{label:'Got it',onClick:resolved},{label:'Still not working',onClick:()=>addMsg('bot','Contact us directly, not the IT Helpdesk, for this: <a href="mailto:OutstationsIBOperator@iberia.es">OutstationsIBOperator@iberia.es</a>.')}]);
+}
+
+function escalate(){
+  addMsg('bot','Here is who to contact:<ul><li>Accounts, passwords, Authenticator or AMOS — <b>Iberia IT Helpdesk</b>, +34 915 874 700 or <a href="mailto:ssi@iberia.es">ssi@iberia.es</a></li><li>Anything else about your station — <a href="mailto:outstationsiboperator@iberia.es">outstationsiboperator@iberia.es</a></li></ul>');
+}
+document.getElementById('escalateBtn').onclick = ()=>{
+  addMsg('user','Contact the support team');
+  escalate();
+};
+
+/* ---------- free text ---------- */
+const KEYWORD_ROUTES = [
+  {flow:flowAuthenticator,keywords:['authenticator','new phone','changed phone','change my phone','mobile phone','new device','mfa']},
+  {flow:flowOtp,keywords:['otp','one-time password','one time password','no domain user','tablet']},
+  {flow:flowViewer,keywords:['docunet viewer','offline','download manuals','without connection','no connection']},
+  {flow:flowDocunet,keywords:['docunet','contentmanager','content manager','comply','vistair','ibcm','id not recognized','not recognized','no permission',"don't have permission",'contact your administrator','read and sign','read & sign']},
+  {flow:flowEtlb,keywords:['etlb','e-tlb','aviatar','technical logbook']},
+  {flow:flowAmos,keywords:['amos']},
+  {flow:flowOnboarding,keywords:['new account','first access','first time','onboarding','just joined','new employee']},
+  {flow:flowUserMgmt,keywords:['users management','create a user','create user','add a user','remove a user','remove user','delete a user','delete user','eliminate a user','eliminate user','new user']},
+  {flow:flowCuenta,keywords:['password','locked','blocked','forgot',"can't sign in",'cannot sign in',"can't log in",'cannot log in']}
+];
+function routeFreeText(t){
+  const l = t.toLowerCase();
+  for(const r of KEYWORD_ROUTES){ if(r.keywords.some(k=>l.includes(k))) return r.flow; }
+  return null;
+}
+
+let aiConversation = [];
+function seedConversation(){
+  aiConversation = [];
+  if(!station.code) return;
+  let ctx;
+  if(station.docunetGeneric && station.domain){
+    ctx = 'Context: I am at station '+station.code+'. Docunet/ContentManager365 signs in with the shared account '
+      +station.docunetGeneric+' (organisation code IBCM, Vistair login, reset via the Vistair page, not Microsoft). '
+      +'I also have a personal Iberia Domain account for AMOS, e-TLB, Authenticator and password resets. Requests '
+      +'to create or remove a personal Domain user must be requested by someone with Iberia Domain and Docunet '
+      +'access, through the Users Management form in ContentManager365/Docunet (https://docunet-online.vistair.com/, '
+      +'folders: IBERIA > CAMO MANUALS & PROCEDURES > Special Procedures and Forms for external MRO\'s > Forms > '
+      +'Users Management). If that fails, contact OutstationsIBOperator@iberia.es directly, not the IT Helpdesk. '
+      +'Only ever suggest steps for systems that apply to me. Do not ask me for my station or account type again.';
+  } else if(station.docunetGeneric){
+    ctx = 'Context: I am at station '+station.code+'. This station has no personal Iberia Domain accounts at all. '
+      +'Docunet/ContentManager365 signs in with the shared account '+station.docunetGeneric
+      +' (organisation code IBCM, Vistair login, reset via the Vistair page, not Microsoft, no Authenticator). '
+      +'This station has no AMOS access. For e-TLB (Aviatar), there is no direct sign-in at all — always request a '
+      +'one-time password from MAINTROL to certify (phone +34 91 318 93 00/01/02 or +34 680 99 46 06, email '
+      +'MAINTROL@iberia.es, giving the aircraft tail number and the certifier\'s personal company email — not the '
+      +'generic station account — plus their name). Iberia does not create individual users for this station, so '
+      +'never mention the Users Management form or creating/removing personal users here. Only ever suggest steps '
+      +'for systems that apply to me — never suggest AMOS, Authenticator, or personal-Domain-account steps. Do '
+      +'not ask me for my station or account type again.';
+  } else {
+    ctx = 'Context: I am at station '+station.code+', which uses a personal Iberia Domain account for everything '
+      +'(Docunet/ContentManager365, e-TLB, AMOS, Authenticator, password resets). Requests to create or remove a '
+      +'user must be requested by someone with Iberia Domain and Docunet access, through the Users Management form '
+      +'in ContentManager365/Docunet (https://docunet-online.vistair.com/, folders: IBERIA > CAMO MANUALS & '
+      +'PROCEDURES > Special Procedures and Forms for external MRO\'s > Forms > Users Management). If that fails, '
+      +'contact OutstationsIBOperator@iberia.es directly, not the IT Helpdesk. Do not ask me for my station or '
+      +'account type again.';
+  }
+  aiConversation.push({role:'user',content:ctx});
+  aiConversation.push({role:'assistant',content:'Understood. I will use that for the rest of this conversation.'});
+}
+
+async function askAI(){
+  const r = await fetch(WORKER_URL,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({messages:aiConversation})
+  });
+  if(!r.ok) throw new Error('Worker request failed: '+r.status);
+  const d = await r.json();
+  if(!d.answer) throw new Error('Empty answer');
+  return d.answer;
+}
+
+function renderAnswer(text){
+  const esc = text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  return esc
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>')
+    .replace(/(^|[\s(])(https?:\/\/[^\s<)]+)/g,'$1<a href="$2" target="_blank" rel="noopener">$2</a>')
+    .replace(/\*\*([^*]+)\*\*/g,'<b>$1</b>')
+    .replace(/\n/g,'<br>');
+}
+
+async function handleSend(){
+  const q = freeInput.value.trim();
+  if(!q) return;
+  addMsg('user',q);
+  freeInput.value='';
+  sendBtn.disabled=true;
+  thinkingEl.style.display='flex';
+  aiConversation.push({role:'user',content:q});
+  try{
+    const a = await askAI();
+    aiConversation.push({role:'assistant',content:a});
+    addMsg('bot',renderAnswer(a));
+  }catch(e){
+    aiConversation.pop();
+    const m = routeFreeText(q);
+    if(m){ m(); }
+    else{
+      addMsg('bot','That does not match any issue on this desk. Here is who to contact:<ul><li>Accounts, passwords, Authenticator or AMOS — <b>Iberia IT Helpdesk</b>, +34 915 874 700 or <a href="mailto:ssi@iberia.es">ssi@iberia.es</a></li><li>Anything else about your station — <a href="mailto:outstationsiboperator@iberia.es">outstationsiboperator@iberia.es</a></li></ul>');
+    }
+  }finally{
+    thinkingEl.style.display='none';
+    sendBtn.disabled=false;
+    freeInput.focus();
+  }
+}
+sendBtn.addEventListener('click',handleSend);
+freeInput.addEventListener('keydown',e=>{ if(e.key==='Enter') handleSend(); });
+staInput.focus();
+</script>
+</body>
+</html>
