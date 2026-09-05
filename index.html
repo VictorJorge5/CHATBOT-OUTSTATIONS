@@ -458,6 +458,8 @@ function renderTopics(){
     b.onclick = ()=>FLOW_FN[t.flow]();
     nav.appendChild(b);
   });
+  nav.scrollLeft = 0;
+  requestAnimationFrame(()=>{ nav.scrollLeft = 0; });
 }
 
 function enterDesk(code){
