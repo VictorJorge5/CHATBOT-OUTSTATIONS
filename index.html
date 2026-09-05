@@ -286,8 +286,14 @@
     .brandline{margin-bottom:30px;}
     .grid{grid-template-columns:1fr;grid-template-rows:auto 1fr;}
     .index{
+      position:relative;
       border-right:0;border-bottom:1px solid var(--line);
-      display:flex;flex-wrap:wrap;gap:7px;padding:11px 14px;
+      display:flex;gap:7px;overflow-x:auto;padding:11px 14px;
+    }
+    .index::after{
+      content:"";position:absolute;top:0;right:0;bottom:1px;width:36px;
+      background:linear-gradient(to right, rgba(244,246,248,0), var(--canvas));
+      pointer-events:none;
     }
     .sect{display:none;}
     .topic{
