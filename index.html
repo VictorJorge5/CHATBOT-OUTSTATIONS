@@ -289,10 +289,16 @@
       position:relative;
       border-right:0;border-bottom:1px solid var(--line);
       display:flex;gap:7px;overflow-x:auto;padding:11px 14px;
+      scroll-snap-type:x mandatory;scroll-padding-left:14px;
     }
     .index::after{
       content:"";position:absolute;top:0;right:0;bottom:1px;width:36px;
       background:linear-gradient(to right, rgba(244,246,248,0), var(--canvas));
+      pointer-events:none;
+    }
+    .index::before{
+      content:"";position:absolute;top:0;left:0;bottom:1px;width:20px;z-index:1;
+      background:linear-gradient(to left, rgba(244,246,248,0), var(--canvas));
       pointer-events:none;
     }
     .sect{display:none;}
@@ -300,6 +306,7 @@
       display:block;width:auto;flex-shrink:0;
       border:1px solid var(--line);border-radius:var(--r);
       background:var(--paper);padding:8px 11px;
+      scroll-snap-align:start;
     }
     .topic .c{display:block;padding-top:0;margin-bottom:3px;}
     .thread{padding:18px 14px 6px;}
