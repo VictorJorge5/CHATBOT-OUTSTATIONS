@@ -350,8 +350,14 @@
     .thread{padding:18px 14px 6px;}
     .composer{padding:11px 14px 13px;}
     .thinking{padding-left:14px;}
-    .topbar{gap:12px;padding:0 16px;}
+    .topbar{gap:10px;padding:0 12px;}
     .topbar .desk-name,.topbar .sep{display:none;}
+    /* On narrow screens the account-type text already appears in Quick reference,
+       so give that space in the badge to the "change station" action instead. */
+    .sta-badge .kind{display:none;}
+    .sta-badge{padding:4px 9px;}
+    .switch{white-space:nowrap;}
+    .lang-switch button{padding:4px 6px;}
     .msg.user{max-width:82%;}
   }
   @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
