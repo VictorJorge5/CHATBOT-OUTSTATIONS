@@ -262,10 +262,12 @@
     border-radius:var(--r);padding:14px;margin-bottom:14px;
   }
   .card .sta-big{
+    display:flex;align-items:center;gap:8px;flex-wrap:wrap;
     font-family:'Barlow Condensed',sans-serif;
-    font-size:42px;font-weight:600;letter-spacing:0.08em;
+    font-size:27px;font-weight:600;letter-spacing:0.06em;
     line-height:1;color:var(--ink);
   }
+  .flag-lg{width:26px;height:20px;border-radius:3px;flex-shrink:0;}
   .kindtag{
     display:inline-block;margin-top:8px;font-size:11.5px;font-weight:600;
     padding:3px 8px;border-radius:var(--r);
@@ -416,7 +418,7 @@ en: {
   describePlaceholder:'Describe your problem…',
   send:'Send',
   quickReference:'Quick reference',
-  orgCode:'Organisation code',
+  orgCode:'Docunet Organisation Code',
   itHelpdesk:'IT Helpdesk',
   signInAs:'Sign in as',
   personalIbDomainNote:'Your personal Iberia Domain user (name@iberia.es)',
@@ -433,9 +435,9 @@ en: {
   answersCoverBoth:'Answers will cover both account types.',
   noteLbl:'Note',
   topics:{
-    docunet:'Cannot access Docunet / ContentManager365',
+    docunet:'Problem accessing Docunet / ContentManager365',
     etlb:'Problem accessing e-TLB',
-    amos:'Problem accessing to AMOS',
+    amos:'Problem accessing AMOS',
     otp:'No Iberia Domain credentials for e-TLB',
     usermgmt:'Create or remove a user',
     onboarding:'New account activation',
@@ -506,9 +508,9 @@ en: {
 
   // Labels reused for the "user bubble" text of each topic (matches topics{} above)
   userBubble:{
-    docunet:'Cannot access Docunet / ContentManager365',
+    docunet:'Problem accessing Docunet / ContentManager365',
     etlb:'Problem accessing e-TLB',
-    amos:'Problem accessing to AMOS',
+    amos:'Problem accessing AMOS',
     otp:'No Iberia Domain credentials for e-TLB',
     usermgmt:'Create or remove a user',
     onboarding:'New account activation',
@@ -533,7 +535,7 @@ es: {
   describePlaceholder:'Describe tu problema…',
   send:'Enviar',
   quickReference:'Referencia rápida',
-  orgCode:'Código de organización',
+  orgCode:'Docunet Organisation Code',
   itHelpdesk:'Soporte de IT',
   signInAs:'Inicia sesión como',
   personalIbDomainNote:'Tu usuario personal de Dominio Iberia (nombre@iberia.es)',
@@ -550,7 +552,7 @@ es: {
   answersCoverBoth:'Las respuestas cubrirán ambos tipos de cuenta.',
   noteLbl:'Nota',
   topics:{
-    docunet:'No puedo acceder a Docunet / ContentManager365',
+    docunet:'Problema para acceder a Docunet / ContentManager365',
     etlb:'Problema para acceder al e-TLB',
     amos:'Problema para acceder a AMOS',
     otp:'Sin credenciales de Dominio Iberia para el e-TLB',
@@ -622,7 +624,7 @@ es: {
   userMgmtStillNot:'Para esto, contacta directamente con nosotros, no con el Soporte de IT: <a href="mailto:OutstationsIBOperator@iberia.es">OutstationsIBOperator@iberia.es</a>.',
 
   userBubble:{
-    docunet:'No puedo acceder a Docunet / ContentManager365',
+    docunet:'Problema para acceder a Docunet / ContentManager365',
     etlb:'Problema para acceder al e-TLB',
     amos:'Problema para acceder a AMOS',
     otp:'Sin credenciales de Dominio Iberia para el e-TLB',
@@ -649,7 +651,7 @@ fr: {
   describePlaceholder:'Décrivez votre problème…',
   send:'Envoyer',
   quickReference:'Référence rapide',
-  orgCode:"Code d'organisation",
+  orgCode:"Docunet Organisation Code",
   itHelpdesk:'Assistance informatique',
   signInAs:'Connectez-vous en tant que',
   personalIbDomainNote:'Votre utilisateur Domaine Iberia personnel (nom@iberia.es)',
@@ -666,7 +668,7 @@ fr: {
   answersCoverBoth:'Les réponses couvriront les deux types de compte.',
   noteLbl:'Remarque',
   topics:{
-    docunet:"Impossible d'accéder à Docunet / ContentManager365",
+    docunet:"Problème d'accès à Docunet / ContentManager365",
     etlb:"Problème d'accès à l'e-TLB",
     amos:"Problème d'accès à AMOS",
     otp:"Pas d'identifiants Domaine Iberia pour l'e-TLB",
@@ -738,7 +740,7 @@ fr: {
   userMgmtStillNot:'Pour cela, contactez-nous directement, pas l\'assistance informatique : <a href="mailto:OutstationsIBOperator@iberia.es">OutstationsIBOperator@iberia.es</a>.',
 
   userBubble:{
-    docunet:"Impossible d'accéder à Docunet / ContentManager365",
+    docunet:"Problème d'accès à Docunet / ContentManager365",
     etlb:"Problème d'accès à l'e-TLB",
     amos:"Problème d'accès à AMOS",
     otp:"Pas d'identifiants Domaine Iberia pour l'e-TLB",
@@ -805,6 +807,11 @@ const STATION_COUNTRY = {
   FRA:'DE', JMK:'GR', JTR:'GR', LJU:'SI', OLB:'IT', OSL:'NO', OTP:'RO', PDL:'PT', PMO:'IT', RAK:'MA',
   RVN:'FI', SPU:'HR', TIA:'AL', TIV:'ME', TOS:'NO', TRS:'IT', ZAG:'HR'
 };
+function flagImgBig(stationCode){
+  const iso = STATION_COUNTRY[stationCode];
+  if(!iso) return '';
+  return '<img class="flag-lg" src="https://flagcdn.com/40x30/'+iso.toLowerCase()+'.png" width="26" height="20" alt="">';
+}
 function flagImg(stationCode){
   const iso = STATION_COUNTRY[stationCode];
   if(!iso) return '';
@@ -915,7 +922,7 @@ function renderStaCard(){
     cardHtml = '<div class="sta-big">—</div><span class="kindtag domain">'+s.noStationSelected+'</span>'
       + '<div class="row"><div class="k">'+s.noteLbl+'</div><div class="v" style="font-weight:400">'+s.answersCoverBoth+'</div></div>';
   } else {
-    cardHtml = '<div class="sta-big">'+flagImg(station.code)+' '+station.code+'</div>';
+    cardHtml = '<div class="sta-big">'+station.code+flagImgBig(station.code)+'</div>';
     if(station.docunetGeneric){
       cardHtml += '<span class="kindtag generic">'+s.sharedDocunet+'</span>'
         + '<div class="row"><div class="k">'+s.docunetSignIn+'</div><div class="v">'+station.docunetGeneric+'</div>'
