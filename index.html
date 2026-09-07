@@ -248,6 +248,13 @@
 
   .composer{border-top:1px solid var(--line);padding:13px 28px 15px;flex-shrink:0;}
   .field{display:flex;gap:9px;}
+  .feedback-link{
+    display:block;margin-top:9px;background:none;border:0;padding:0;
+    font-family:inherit;font-size:12px;color:var(--muted);
+    text-decoration:underline;text-decoration-color:var(--line);
+    text-underline-offset:2px;cursor:pointer;
+  }
+  .feedback-link:hover{color:var(--red);text-decoration-color:var(--red);}
   .field input{
     flex:1;font-family:inherit;font-size:15px;color:var(--ink);
     background:var(--canvas);border:1px solid var(--line);
@@ -417,6 +424,7 @@
           <input type="text" id="freeInput" aria-label="Describe your problem">
           <button id="sendBtn"></button>
         </div>
+        <button class="feedback-link" id="feedbackLink"></button>
       </div>
     </div>
 
@@ -454,6 +462,9 @@ en: {
   commonIssues:'Common issues',
   describePlaceholder:'Describe your problem…',
   send:'Send',
+  feedbackLink:'Didn\'t get the right answer? Send us this conversation',
+  feedbackYouLabel:'You',
+  feedbackTeamLabel:'Support Team',
   quickReference:'Quick reference',
   orgCode:'Docunet Organisation Code',
   itHelpdesk:'IT Helpdesk',
@@ -571,6 +582,9 @@ es: {
   commonIssues:'Incidencias frecuentes',
   describePlaceholder:'Describe tu problema…',
   send:'Enviar',
+  feedbackLink:'¿No has tenido la respuesta correcta? Envíanos esta conversación',
+  feedbackYouLabel:'Tú',
+  feedbackTeamLabel:'Equipo de soporte',
   quickReference:'Referencia rápida',
   orgCode:'Docunet Organisation Code',
   itHelpdesk:'Soporte de IT',
@@ -687,6 +701,9 @@ fr: {
   commonIssues:'Problèmes fréquents',
   describePlaceholder:'Décrivez votre problème…',
   send:'Envoyer',
+  feedbackLink:"Réponse incorrecte ? Envoyez-nous cette conversation",
+  feedbackYouLabel:'Vous',
+  feedbackTeamLabel:"Équipe d'assistance",
   quickReference:'Référence rapide',
   orgCode:"Docunet Organisation Code",
   itHelpdesk:'Assistance informatique',
@@ -894,6 +911,7 @@ function applyStaticText(){
   document.getElementById('topicsToggleLbl').textContent = s.commonIssues;
   document.getElementById('freeInput').placeholder = s.describePlaceholder;
   document.getElementById('sendBtn').textContent = s.send;
+  document.getElementById('feedbackLink').textContent = s.feedbackLink;
   document.getElementById('quickRefLbl').textContent = s.quickReference;
   document.getElementById('ctxToggleLbl').textContent = s.quickReference;
   document.getElementById('orgCodeLbl').textContent = s.orgCode;
@@ -1249,12 +1267,16 @@ function routeFreeText(t){
 }
 
 let aiConversation = [];
+let visibleStart = 0; // index in aiConversation where the real (visible) conversation starts,
+                        // i.e. right after the invisible station-context seed — used so the
+                        // feedback email only includes what the user actually saw.
 function seedConversation(){
   aiConversation = [];
   const langLine = 'Always answer in '+S().aiLangName+', regardless of the language used in this context message. ';
   if(!station.code){
     aiConversation.push({role:'user',content:langLine});
     aiConversation.push({role:'assistant',content:'Understood.'});
+    visibleStart = aiConversation.length;
     return;
   }
   let ctx;
@@ -1289,6 +1311,7 @@ function seedConversation(){
   }
   aiConversation.push({role:'user',content:ctx});
   aiConversation.push({role:'assistant',content:'Understood. I will use that for the rest of this conversation.'});
+  visibleStart = aiConversation.length;
 }
 
 async function askAI(){
@@ -1364,17 +1387,37 @@ async function handleSend(){
 sendBtn.addEventListener('click',handleSend);
 freeInput.addEventListener('keydown',e=>{ if(e.key==='Enter') handleSend(); });
 
-/* ---------- installable app (PWA) ----------
-   A minimal service worker (registered from an in-memory Blob, so no separate
-   file is needed) is enough to satisfy Android/Chrome's "installable" checks
-   alongside the manifest above. It doesn't cache anything — the app still
-   needs a connection to reach the Worker, this only enables "Add to Home
-   Screen". */
+document.getElementById('feedbackLink').addEventListener('click', ()=>{
+  const s = S();
+  const stationLine = station && station.code ? station.code : 'not selected';
+  const langLine = LANG.toUpperCase();
+  const visible = aiConversation.slice(visibleStart);
+  const transcript = visible
+    .map(m => (m.role === 'user' ? s.feedbackYouLabel : s.feedbackTeamLabel) + ': ' + m.content)
+    .join('\n\n');
+  const truncated = transcript.length > 1500
+    ? '…(earlier part of the conversation omitted)…\n\n' + transcript.slice(-1500)
+    : transcript;
+  const subject = 'Outstations Support Hub feedback — station ' + stationLine;
+  const body =
+    'Station: ' + stationLine + '\n' +
+    'Language: ' + langLine + '\n\n' +
+    'What went wrong / missing (please add a note here):\n\n\n' +
+    '--- Conversation ---\n' + truncated;
+  const mailto = 'mailto:OutstationsIBOperator@iberia.es'
+    + '?subject=' + encodeURIComponent(subject)
+    + '&body=' + encodeURIComponent(body);
+  window.location.href = mailto;
+});
+
+/* ---------- installable app (PWA) + offline support ----------
+   Registers the real sw.js file (must be uploaded alongside this HTML file,
+   in the same folder) which caches this page so it can still open without
+   a connection. The 8 button-driven flows and station data work fully
+   offline since they live in this file; only free-text AI answers need a
+   connection to reach the Cloudflare Worker. */
 if('serviceWorker' in navigator){
-  const swCode = "self.addEventListener('fetch', function(){});";
-  const swBlob = new Blob([swCode], {type:'application/javascript'});
-  const swUrl = URL.createObjectURL(swBlob);
-  navigator.serviceWorker.register(swUrl).catch(()=>{});
+  navigator.serviceWorker.register('./sw.js').catch(()=>{});
 }
 </script>
 </body>
