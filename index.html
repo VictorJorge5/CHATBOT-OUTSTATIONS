@@ -1014,6 +1014,9 @@ function renderStaCard(){
 function enterDesk(code){
   code = (code||'').toUpperCase().trim();
   station = stationProfile(code || null);
+  if(station.code){
+    try{ localStorage.setItem('osh_station', station.code); }catch(e){}
+  }
   renderStaCard();
   renderTopics();
   gate.style.display = 'none';
@@ -1029,6 +1032,7 @@ function enterDesk(code){
 
 document.getElementById('staSkip').onclick = ()=>enterDesk(null);
 document.getElementById('switchSta').onclick = ()=>{
+  try{ localStorage.removeItem('osh_station'); }catch(e){}
   desk.classList.remove('on');
   gate.style.display = 'flex';
   threadEl.innerHTML = '';
@@ -1419,6 +1423,15 @@ document.getElementById('feedbackLink').addEventListener('click', ()=>{
 if('serviceWorker' in navigator){
   navigator.serviceWorker.register('./sw.js').catch(()=>{});
 }
+
+// If a station was picked on a previous visit, skip straight to the desk for it.
+// Placed at the very end of the script so every function/element it needs
+// (enterDesk, freeInput, etc.) is already defined by the time it runs.
+(function(){
+  let saved = null;
+  try{ saved = localStorage.getItem('osh_station'); }catch(e){}
+  if(saved) enterDesk(saved);
+})();
 </script>
 </body>
 </html>
