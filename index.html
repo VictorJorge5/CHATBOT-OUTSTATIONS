@@ -946,7 +946,7 @@ const TOPIC_KEYS = [
   { flow:'onboarding',    code:'ONB-06',  key:'onboarding',    show: s=>s.domain },
   { flow:'authenticator', code:'AUTH-07', key:'authenticator', show: s=>s.domain },
   { flow:'viewer',        code:'APP-08',  key:'viewer',        show: ()=>true },
-  { flow:'material',      code:'MAT-09',  key:'material',      show: s=>!!s.docunetGeneric || ['LHR','MXP','LGW'].includes(s.code) },
+  { flow:'material',      code:'MAT-09',  key:'material',      show: s=>!s.docunetGeneric },
   { flow:'tod',           code:'TOD-10',  key:'tod',           show: ()=>true }
 ];
 const FLOW_FN = {
@@ -1321,10 +1321,10 @@ function seedConversation(){
     return;
   }
   let ctx;
-  const hasMaterialForm = !!station.docunetGeneric || ['LHR','MXP','LGW'].includes(station.code);
+  const hasMaterialForm = !station.docunetGeneric;
   const materialLine = hasMaterialForm
     ? ' I also have access to the Material Replenishment & Receipt Form (replenishment, arrival confirmation, expired material).'
-    : ' I do NOT have access to the Material Replenishment & Receipt Form — never suggest it to me, only stations with a generic account, or LHR/MXP/LGW, have it.';
+    : ' I do NOT have access to the Material Replenishment & Receipt Form — never suggest it to me, only stations without a generic account have it.';
   if(station.docunetGeneric && station.domain){
     ctx = langLine+'Context: I am at station '+station.code+'. Docunet/ContentManager365 signs in with the shared account '
       +station.docunetGeneric+' (organisation code IBCM, Vistair login, reset via the Vistair page, not Microsoft). '
