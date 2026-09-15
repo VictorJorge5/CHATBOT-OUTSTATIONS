@@ -15,7 +15,7 @@
 // version of soporte-outstations.html, so old cached copies get replaced
 // instead of lingering forever on people's phones.
 
-const CACHE_NAME = 'osh-cache-v1';
+const CACHE_NAME = 'osh-cache-v2';
 const APP_SHELL_URL = './';
 
 self.addEventListener('install', (event) => {
