@@ -490,7 +490,9 @@ en: {
     usermgmt:'Create or remove a user',
     onboarding:'New account activation',
     authenticator:'Changed phone, Authenticator not working',
-    viewer:'Read manuals offline'
+    viewer:'Read manuals offline',
+    material:'Report material replenishment or receipt',
+    tod:'Report a technical delay or occurrence'
   },
   greetNoStation:'Pick an issue on the left, or describe the problem below.',
   greetScopeNote:'This desk covers access to Iberia systems only. For maintenance procedures, airworthiness or aircraft documentation, refer to the LSHM or contact MAINTROL.',
@@ -551,8 +553,10 @@ en: {
   viewerMsg:'To read ContentManager365 manuals without a connection:<ol><li>Install <b>DocuNet Viewer</b> from the App Store or Google Play.</li><li>While on Wi-Fi or mobile data, download the manuals you need. They stay available offline.</li></ol>For online reading, use the DocuNet Viewer link provided by Iberia — nothing to install.',
   viewerSharedNote:(code)=>`<div class="note">Docunet at your station shares one account, so a lockout affects everyone at ${code}.</div>`,
 
-  userMgmtMsg:'New users and removals go through the Users Management form in ContentManager365/Docunet (must be requested by someone with Iberia Domain and access to Docunet):<ol><li>Open a private or incognito window, so the browser does not reuse an account you already have open.</li><li>Go to <a href="https://docunet-online.vistair.com/" target="_blank" rel="noopener">ContentManager365 (Docunet)</a>.</li><li>Navigate the folders: <b>IBERIA</b> &gt; <b>CAMO MANUALS &amp; PROCEDURES</b> &gt; <b>Special Procedures and Forms for external MRO\'s</b> &gt; <b>Forms</b> &gt; <b>Users Management</b>.</li><li>Fill in and submit the form with the required details.</li></ol>',
+  userMgmtMsg:'New users and removals go through the Users Management form in ContentManager365/Docunet (must be requested by someone with Iberia Domain and access to Docunet):<ol><li>Open a private or incognito window, so the browser does not reuse an account you already have open.</li><li>Go to <a href="https://docunet-online.vistair.com/?manualCode=IBCM-AUTO-05CB78&preferredRevisionId=1&id=page-1" target="_blank" rel="noopener">ContentManager365 (Docunet)</a>.</li><li>Navigate the folders: <b>IBERIA</b> &gt; <b>CAMO MANUALS &amp; PROCEDURES</b> &gt; <b>Special Procedures and Forms for external MRO\'s</b> &gt; <b>Forms</b> &gt; <b>Users Management</b>.</li><li>Fill in and submit the form with the required details.</li></ol>',
   userMgmtStillNot:'Contact us directly, not the IT Helpdesk, for this: <a href="mailto:OutstationsIBOperator@iberia.es">OutstationsIBOperator@iberia.es</a>.',
+  materialMsg:'To report material replenishment, an arrival confirmation, or expired material, submit the Material Replenishment &amp; Receipt Form:<ol><li>Open a private or incognito window, so the browser does not reuse an account you already have open.</li><li>Go to <a href="https://docunet-online.vistair.com/?manualCode=IBCM-AUTO-115195&preferredRevisionId=1&id=page-1" target="_blank" rel="noopener">Material Replenishment &amp; Receipt Form</a>.</li><li>Choose the request type (Replenishment, Arrival confirmation, or Expired material) and fill in the date, station, fleet, material type and quantity.</li></ol>If material arrived without the required EASA Form 1 or Certificate of Conformity (CoC), request it from: MADMAIN.StoreLM@iberia.es, aitorres@iberia.es, mdiazga@iberia.es, or <a href="mailto:OutstationsIBOperator@iberia.es">OutstationsIBOperator@iberia.es</a>.',
+  todMsg:'To report a maintenance delay or an operational technical event, submit the Technical Occurrences &amp; Delays Reporting Form (TOD Form):<ol><li>Open a private or incognito window, so the browser does not reuse an account you already have open.</li><li>Go to <a href="https://docunet-online.vistair.com/?manualCode=IBCM-AUTO-001106&preferredRevisionId=1&id=page-1" target="_blank" rel="noopener">Technical Occurrences &amp; Delays Reporting Form</a>.</li><li>Choose the event type (Maintenance Delay or Operational Technical Event) and fill in the flight and aircraft details.</li></ol>',
 
   // Labels reused for the "user bubble" text of each topic (matches topics{} above)
   userBubble:{
@@ -564,6 +568,8 @@ en: {
     onboarding:'New account activation',
     authenticator:'Changed phone, Authenticator not working',
     viewer:'Read manuals offline',
+    material:'Report material replenishment or receipt',
+    tod:'Report a technical delay or occurrence',
     cuenta:'Locked account or forgotten password'
   },
   aiLangName:'English'
@@ -610,7 +616,9 @@ es: {
     usermgmt:'Crear o eliminar un usuario',
     onboarding:'Activación de cuenta nueva',
     authenticator:'Cambié de móvil, el Authenticator no funciona',
-    viewer:'Leer manuales sin conexión'
+    viewer:'Leer manuales sin conexión',
+    material:'Reportar reposición o recepción de material',
+    tod:'Reportar un retraso o incidencia técnica'
   },
   greetNoStation:'Elige una incidencia a la izquierda, o describe el problema abajo.',
   greetScopeNote:'Este servicio cubre únicamente el acceso a los sistemas de Iberia. Para procedimientos de mantenimiento, aeronavegabilidad o documentación de la aeronave, consulta el LSHM o contacta con MAINTROL.',
@@ -671,8 +679,10 @@ es: {
   viewerMsg:'Para leer los manuales de ContentManager365 sin conexión:<ol><li>Instala <b>DocuNet Viewer</b> desde la App Store o Google Play.</li><li>Con Wi-Fi o datos móviles, descarga los manuales que necesites. Quedarán disponibles sin conexión.</li></ol>Para leerlos en línea, usa el enlace de DocuNet Viewer que facilita Iberia — no hay que instalar nada.',
   viewerSharedNote:(code)=>`<div class="note">Docunet en tu estación comparte una sola cuenta, así que un bloqueo afecta a todos en ${code}.</div>`,
 
-  userMgmtMsg:'Las altas y bajas de usuarios se hacen mediante el formulario Users Management en ContentManager365/Docunet (debe solicitarlo alguien con Dominio Iberia y acceso a Docunet):<ol><li>Abre una ventana privada o de incógnito, para que el navegador no reutilice una cuenta que ya tengas abierta.</li><li>Ve a <a href="https://docunet-online.vistair.com/" target="_blank" rel="noopener">ContentManager365 (Docunet)</a>.</li><li>Navega por las carpetas: <b>IBERIA</b> &gt; <b>CAMO MANUALS &amp; PROCEDURES</b> &gt; <b>Special Procedures and Forms for external MRO\'s</b> &gt; <b>Forms</b> &gt; <b>Users Management</b>.</li><li>Rellena y envía el formulario con los datos necesarios.</li></ol>',
+  userMgmtMsg:'Las altas y bajas de usuarios se hacen mediante el formulario Users Management en ContentManager365/Docunet (debe solicitarlo alguien con Dominio Iberia y acceso a Docunet):<ol><li>Abre una ventana privada o de incógnito, para que el navegador no reutilice una cuenta que ya tengas abierta.</li><li>Ve a <a href="https://docunet-online.vistair.com/?manualCode=IBCM-AUTO-05CB78&preferredRevisionId=1&id=page-1" target="_blank" rel="noopener">ContentManager365 (Docunet)</a>.</li><li>Navega por las carpetas: <b>IBERIA</b> &gt; <b>CAMO MANUALS &amp; PROCEDURES</b> &gt; <b>Special Procedures and Forms for external MRO\'s</b> &gt; <b>Forms</b> &gt; <b>Users Management</b>.</li><li>Rellena y envía el formulario con los datos necesarios.</li></ol>',
   userMgmtStillNot:'Para esto, contacta directamente con nosotros, no con el Soporte de IT: <a href="mailto:OutstationsIBOperator@iberia.es">OutstationsIBOperator@iberia.es</a>.',
+  materialMsg:'Para reportar reposición de material, confirmación de llegada, o material caducado, rellena el Material Replenishment &amp; Receipt Form:<ol><li>Abre una ventana privada o de incógnito, para que el navegador no reutilice una cuenta que ya tengas abierta.</li><li>Ve a <a href="https://docunet-online.vistair.com/?manualCode=IBCM-AUTO-115195&preferredRevisionId=1&id=page-1" target="_blank" rel="noopener">Material Replenishment &amp; Receipt Form</a>.</li><li>Elige el tipo de solicitud (Replenishment, Arrival confirmation, o Expired material) y rellena la fecha, estación, flota, tipo de material y cantidad.</li></ol>Si el material llegó sin el EASA Form 1 o el Certificado de Conformidad (CoC) requerido, solicítalo a: MADMAIN.StoreLM@iberia.es, aitorres@iberia.es, mdiazga@iberia.es, o <a href="mailto:OutstationsIBOperator@iberia.es">OutstationsIBOperator@iberia.es</a>.',
+  todMsg:'Para reportar un retraso de mantenimiento o un evento técnico operacional, rellena el Technical Occurrences &amp; Delays Reporting Form (TOD Form):<ol><li>Abre una ventana privada o de incógnito, para que el navegador no reutilice una cuenta que ya tengas abierta.</li><li>Ve a <a href="https://docunet-online.vistair.com/?manualCode=IBCM-AUTO-001106&preferredRevisionId=1&id=page-1" target="_blank" rel="noopener">Technical Occurrences &amp; Delays Reporting Form</a>.</li><li>Elige el tipo de evento (Maintenance Delay u Operational Technical Event) y rellena los datos del vuelo y de la aeronave.</li></ol>',
 
   userBubble:{
     docunet:'Problema para acceder a Docunet / ContentManager365',
@@ -683,6 +693,8 @@ es: {
     onboarding:'Activación de cuenta nueva',
     authenticator:'Cambié de móvil, el Authenticator no funciona',
     viewer:'Leer manuales sin conexión',
+    material:'Reportar reposición o recepción de material',
+    tod:'Reportar un retraso o incidencia técnica',
     cuenta:'Cuenta bloqueada o contraseña olvidada'
   },
   aiLangName:'Spanish'
@@ -729,7 +741,9 @@ fr: {
     usermgmt:'Créer ou supprimer un utilisateur',
     onboarding:"Activation d'un nouveau compte",
     authenticator:'Changement de téléphone, Authenticator ne fonctionne pas',
-    viewer:'Lire les manuels hors ligne'
+    viewer:'Lire les manuels hors ligne',
+    material:'Signaler un réapprovisionnement ou une réception de matériel',
+    tod:'Signaler un retard ou un incident technique'
   },
   greetNoStation:'Choisissez un problème à gauche, ou décrivez le problème ci-dessous.',
   greetScopeNote:"Ce service couvre uniquement l'accès aux systèmes Iberia. Pour les procédures de maintenance, la navigabilité ou la documentation de l'appareil, consultez le LSHM ou contactez MAINTROL.",
@@ -790,8 +804,10 @@ fr: {
   viewerMsg:"Pour lire les manuels ContentManager365 sans connexion :<ol><li>Installez <b>DocuNet Viewer</b> depuis l'App Store ou Google Play.</li><li>Avec le Wi-Fi ou les données mobiles, téléchargez les manuels dont vous avez besoin. Ils restent disponibles hors ligne.</li></ol>Pour une lecture en ligne, utilisez le lien DocuNet Viewer fourni par Iberia — rien à installer.",
   viewerSharedNote:(code)=>`<div class="note">Docunet dans votre station partage un seul compte, un blocage affecte donc tout le monde à ${code}.</div>`,
 
-  userMgmtMsg:"Les créations et suppressions d'utilisateurs se font via le formulaire Users Management dans ContentManager365/Docunet (doit être demandé par une personne disposant d'un Domaine Iberia et d'un accès à Docunet) :<ol><li>Ouvrez une fenêtre privée ou de navigation privée, pour que le navigateur ne réutilise pas un compte déjà ouvert.</li><li>Allez sur <a href=\"https://docunet-online.vistair.com/\" target=\"_blank\" rel=\"noopener\">ContentManager365 (Docunet)</a>.</li><li>Parcourez les dossiers : <b>IBERIA</b> &gt; <b>CAMO MANUALS &amp; PROCEDURES</b> &gt; <b>Special Procedures and Forms for external MRO\'s</b> &gt; <b>Forms</b> &gt; <b>Users Management</b>.</li><li>Remplissez et soumettez le formulaire avec les informations requises.</li></ol>",
+  userMgmtMsg:"Les créations et suppressions d'utilisateurs se font via le formulaire Users Management dans ContentManager365/Docunet (doit être demandé par une personne disposant d'un Domaine Iberia et d'un accès à Docunet) :<ol><li>Ouvrez une fenêtre privée ou de navigation privée, pour que le navigateur ne réutilise pas un compte déjà ouvert.</li><li>Allez sur <a href=\"https://docunet-online.vistair.com/?manualCode=IBCM-AUTO-05CB78&preferredRevisionId=1&id=page-1\" target=\"_blank\" rel=\"noopener\">ContentManager365 (Docunet)</a>.</li><li>Parcourez les dossiers : <b>IBERIA</b> &gt; <b>CAMO MANUALS &amp; PROCEDURES</b> &gt; <b>Special Procedures and Forms for external MRO\'s</b> &gt; <b>Forms</b> &gt; <b>Users Management</b>.</li><li>Remplissez et soumettez le formulaire avec les informations requises.</li></ol>",
   userMgmtStillNot:'Pour cela, contactez-nous directement, pas l\'assistance informatique : <a href="mailto:OutstationsIBOperator@iberia.es">OutstationsIBOperator@iberia.es</a>.',
+  materialMsg:"Pour signaler un réapprovisionnement de matériel, une confirmation de réception, ou du matériel expiré, soumettez le Material Replenishment &amp; Receipt Form :<ol><li>Ouvrez une fenêtre privée ou de navigation privée, pour que le navigateur ne réutilise pas un compte déjà ouvert.</li><li>Allez sur <a href=\"https://docunet-online.vistair.com/?manualCode=IBCM-AUTO-115195&preferredRevisionId=1&id=page-1\" target=\"_blank\" rel=\"noopener\">Material Replenishment &amp; Receipt Form</a>.</li><li>Choisissez le type de demande (Replenishment, Arrival confirmation, ou Expired material) et renseignez la date, la station, la flotte, le type de matériel et la quantité.</li></ol>Si le matériel est arrivé sans le EASA Form 1 ou le Certificat de Conformité (CoC) requis, demandez-le à : MADMAIN.StoreLM@iberia.es, aitorres@iberia.es, mdiazga@iberia.es, ou <a href=\"mailto:OutstationsIBOperator@iberia.es\">OutstationsIBOperator@iberia.es</a>.",
+  todMsg:"Pour signaler un retard de maintenance ou un événement technique opérationnel, soumettez le Technical Occurrences &amp; Delays Reporting Form (TOD Form) :<ol><li>Ouvrez une fenêtre privée ou de navigation privée, pour que le navigateur ne réutilise pas un compte déjà ouvert.</li><li>Allez sur <a href=\"https://docunet-online.vistair.com/?manualCode=IBCM-AUTO-001106&preferredRevisionId=1&id=page-1\" target=\"_blank\" rel=\"noopener\">Technical Occurrences &amp; Delays Reporting Form</a>.</li><li>Choisissez le type d'événement (Maintenance Delay ou Operational Technical Event) et renseignez les données du vol et de l'appareil.</li></ol>",
 
   userBubble:{
     docunet:"Problème d'accès à Docunet / ContentManager365",
@@ -802,6 +818,8 @@ fr: {
     onboarding:"Activation d'un nouveau compte",
     authenticator:'Changement de téléphone, Authenticator ne fonctionne pas',
     viewer:'Lire les manuels hors ligne',
+    material:'Signaler un réapprovisionnement ou une réception de matériel',
+    tod:'Signaler un retard ou un incident technique',
     cuenta:'Compte bloqué ou mot de passe oublié'
   },
   aiLangName:'French'
@@ -811,7 +829,7 @@ function S(){ return I18N[LANG]; }
 
 /* 47 stations confirmed with AMOS access and personal Iberia Domain accounts */
 const AMOS_DOMAIN = ['AMS','ARN','ATH','BER','BOG','BOS','BRU','BUD','CDG','DFW','DOH','DSS','DUS','EWR',
-  'FCO','FOR','GVA','HAM','HAV','HEL','IAD','JFK','LAX','LHR','LIM','LIN','LIS','MCO','MIA','MTY','MUC',
+  'FCO','FOR','GVA','HAM','HAV','HEL','IAD','JFK','LAX','LGW','LHR','LIM','LIN','LIS','MCO','MIA','MTY','MUC',
   'MXP','NAP','NRT','OPO','ORD','ORY','PRG','PTY','REC','SDQ','SFO','SJU','VCE','VIE','YYZ','ZRH'];
 
 /* Stations whose Docunet login is a shared generic account rather than a personal Iberia Domain user.
@@ -854,7 +872,7 @@ const desk = document.getElementById('desk');
 const STATION_COUNTRY = {
   AMS:'NL', ARN:'SE', ATH:'GR', BER:'DE', BOG:'CO', BOS:'US', BRU:'BE', BUD:'HU', CDG:'FR', DFW:'US',
   DOH:'QA', DSS:'SN', DUS:'DE', EWR:'US', FCO:'IT', FOR:'BR', GVA:'CH', HAM:'DE', HAV:'CU', HEL:'FI',
-  IAD:'US', JFK:'US', LAX:'US', LHR:'GB', LIM:'PE', LIN:'IT', LIS:'PT', MCO:'US', MIA:'US', MTY:'MX',
+  IAD:'US', JFK:'US', LAX:'US', LGW:'GB', LHR:'GB', LIM:'PE', LIN:'IT', LIS:'PT', MCO:'US', MIA:'US', MTY:'MX',
   MUC:'DE', MXP:'IT', NAP:'IT', NRT:'JP', OPO:'PT', ORD:'US', ORY:'FR', PRG:'CZ', PTY:'PA', REC:'BR',
   SDQ:'DO', SFO:'US', SJU:'US', VCE:'IT', VIE:'AT', YYZ:'CA', ZRH:'CH',
   BRI:'IT', CAG:'IT', CFU:'GR', CPH:'DK', CTA:'IT', DBV:'HR', EDI:'GB', FAO:'PT', FLR:'IT', FNC:'PT',
@@ -927,11 +945,14 @@ const TOPIC_KEYS = [
   { flow:'usermgmt',      code:'USR-05',  key:'usermgmt',      show: s=>s.domain },
   { flow:'onboarding',    code:'ONB-06',  key:'onboarding',    show: s=>s.domain },
   { flow:'authenticator', code:'AUTH-07', key:'authenticator', show: s=>s.domain },
-  { flow:'viewer',        code:'APP-08',  key:'viewer',        show: ()=>true }
+  { flow:'viewer',        code:'APP-08',  key:'viewer',        show: ()=>true },
+  { flow:'material',      code:'MAT-09',  key:'material',      show: s=>!!s.docunetGeneric || ['LHR','MXP','LGW'].includes(s.code) },
+  { flow:'tod',           code:'TOD-10',  key:'tod',           show: ()=>true }
 ];
 const FLOW_FN = {
   authenticator:flowAuthenticator, docunet:flowDocunet, etlb:flowEtlb, cuenta:flowCuenta,
-  amos:flowAmos, onboarding:flowOnboarding, otp:flowOtp, viewer:flowViewer, usermgmt:flowUserMgmt
+  amos:flowAmos, onboarding:flowOnboarding, otp:flowOtp, viewer:flowViewer, usermgmt:flowUserMgmt,
+  material:flowMaterial, tod:flowTod
 };
 
 function renderTopics(){
@@ -1248,6 +1269,20 @@ function flowUserMgmt(){
   addChoices(s1,[{label:s.gotIt,onClick:resolved},{label:s.stillNotWorking,onClick:()=>addMsg('bot', s.userMgmtStillNot)}]);
 }
 
+function flowMaterial(){
+  const s = S();
+  addMsg('user', s.userBubble.material);
+  const s1 = addMsg('bot','<span class="step-label">MAT-09</span>'+s.materialMsg);
+  addChoices(s1,[{label:s.gotIt,onClick:resolved},{label:s.stillNotWorking,onClick:escalate}]);
+}
+
+function flowTod(){
+  const s = S();
+  addMsg('user', s.userBubble.tod);
+  const s1 = addMsg('bot','<span class="step-label">TOD-10</span>'+s.todMsg);
+  addChoices(s1,[{label:s.gotIt,onClick:resolved},{label:s.stillNotWorking,onClick:escalate}]);
+}
+
 function escalate(){
   addMsg('bot', S().escalateMsg);
 }
@@ -1262,6 +1297,8 @@ const KEYWORD_ROUTES = [
   {flow:flowAmos,keywords:['amos']},
   {flow:flowOnboarding,keywords:['new account','first access','first time','onboarding','just joined','new employee','cuenta nueva','nouveau compte']},
   {flow:flowUserMgmt,keywords:['users management','create a user','create user','add a user','remove a user','remove user','delete a user','delete user','eliminate a user','eliminate user','new user','crear usuario','créer un utilisateur']},
+  {flow:flowMaterial,keywords:['material replenishment','arrival confirmation','expired material','reposición de material','réapprovisionnement']},
+  {flow:flowTod,keywords:['technical occurrences','tod form','maintenance delay','operational technical event','retraso de mantenimiento','retard de maintenance']},
   {flow:flowCuenta,keywords:['password','locked','blocked','forgot',"can't sign in",'cannot sign in',"can't log in",'cannot log in','contraseña','olvidé','mot de passe','oublié']}
 ];
 function routeFreeText(t){
@@ -1284,14 +1321,19 @@ function seedConversation(){
     return;
   }
   let ctx;
+  const hasMaterialForm = !!station.docunetGeneric || ['LHR','MXP','LGW'].includes(station.code);
+  const materialLine = hasMaterialForm
+    ? ' I also have access to the Material Replenishment & Receipt Form (replenishment, arrival confirmation, expired material).'
+    : ' I do NOT have access to the Material Replenishment & Receipt Form — never suggest it to me, only stations with a generic account, or LHR/MXP/LGW, have it.';
   if(station.docunetGeneric && station.domain){
     ctx = langLine+'Context: I am at station '+station.code+'. Docunet/ContentManager365 signs in with the shared account '
       +station.docunetGeneric+' (organisation code IBCM, Vistair login, reset via the Vistair page, not Microsoft). '
       +'I also have a personal Iberia Domain account for AMOS, e-TLB, Authenticator and password resets. Requests '
       +'to create or remove a personal Domain user must be requested by someone with Iberia Domain and Docunet '
       +'access, through the Users Management form in ContentManager365/'
-      +'Docunet (https://docunet-online.vistair.com/, folders: IBERIA > CAMO MANUALS & PROCEDURES > Special Procedures and Forms for external MRO\'s > '
-      +'Forms > Users Management). If that fails, contact OutstationsIBOperator@iberia.es directly, not the IT Helpdesk. '
+      +'Docunet (https://docunet-online.vistair.com/?manualCode=IBCM-AUTO-05CB78&preferredRevisionId=1&id=page-1, folders: IBERIA > CAMO MANUALS & PROCEDURES > Special Procedures and Forms for external MRO\'s > '
+      +'Forms > Users Management). If that fails, contact OutstationsIBOperator@iberia.es directly, not the IT Helpdesk.'
+      +materialLine+' '
       +'Only ever suggest steps for systems that apply to me. Do not ask me for my station or account type again.';
   } else if(station.docunetGeneric){
     ctx = langLine+'Context: I am at station '+station.code+'. This station has no personal Iberia Domain accounts at all. '
@@ -1301,16 +1343,20 @@ function seedConversation(){
       +'one-time password from MAINTROL to certify (phone +34 91 318 93 00/01/02 or +34 680 99 46 06, email '
       +'MAINTROL@iberia.es, giving the aircraft tail number and the certifier\'s personal company email — not the '
       +'generic station account — plus their name). Iberia does not create individual users for this station, so '
-      +'never mention the Users Management form or creating/removing personal users here. Only ever suggest steps '
+      +'never mention the Users Management form or creating/removing personal users here.'
+      +materialLine+' '
+      +'Only ever suggest steps '
       +'for systems that apply to me — never suggest AMOS, Authenticator, or personal-Domain-account steps. Do '
       +'not ask me for my station or account type again.';
   } else {
     ctx = langLine+'Context: I am at station '+station.code+', which uses a personal Iberia Domain account for everything '
       +'(Docunet/ContentManager365, e-TLB, AMOS, Authenticator, password resets). Requests to create or remove a '
       +'user must be requested by someone with Iberia Domain and Docunet access, through the Users Management form '
-      +'in ContentManager365/Docunet (https://docunet-online.vistair.com/, folders: IBERIA > CAMO MANUALS & '
+      +'in ContentManager365/Docunet (https://docunet-online.vistair.com/?manualCode=IBCM-AUTO-05CB78&preferredRevisionId=1&id=page-1, folders: IBERIA > CAMO MANUALS & '
       +'PROCEDURES > Special Procedures and Forms for external MRO\'s > Forms > Users Management). If that fails, '
-      +'contact OutstationsIBOperator@iberia.es directly, not the IT Helpdesk. Do not ask me for my station or '
+      +'contact OutstationsIBOperator@iberia.es directly, not the IT Helpdesk.'
+      +materialLine+' '
+      +'Do not ask me for my station or '
       +'account type again.';
   }
   aiConversation.push({role:'user',content:ctx});
